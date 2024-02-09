@@ -1,19 +1,25 @@
-from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
-def find_by_id(driver, locator) -> WebElement:
-    return driver.find_element(By.ID, locator)
-
-def find_by_class(driver, locator) -> WebElement:
-    return driver.find_element(By.CLASS_NAME, locator)
+class ExpectedConditions:
+    pass
 
 
 class BasePage:
-    """Class which reflects locators on the main page"""
-    logo = "logo"
-    start_button = "btn-download"
-    explore_button = "btn-explore"
-    url = "https://demo.prestashop.com/#/en/front"
 
+    def __init__(self, driver):
+        self.driver: WebDriver = driver
 
+    def find_element(self, locator) -> WebElement:
+        return self.driver.find_element(*locator)
+
+    def open_url(self, url):
+        self.driver.get(url)
+
+    def wait_element_absent(self, locator, timeout=10):
+        WebDriverWait(
+            driver=self.driver, timeout=timeout
+        ).until(EC.invisibility_of_element(self.find_element(locator)))
