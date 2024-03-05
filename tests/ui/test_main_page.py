@@ -29,5 +29,3 @@ class TestMainPage:
         page.open_url(page.url)
         page.wait_element_absent(page.loader)
 
-    def test_first_loader_is_absent(self, driver):
-        ...
