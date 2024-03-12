@@ -2,6 +2,6 @@
 import pytest
 
 
-@pytest.fixture(autouse=True)
-def a():
-    print("string" * 5)
+# @pytest.fixture(autouse=True)
+# def a():
+#     print("string" * 5)

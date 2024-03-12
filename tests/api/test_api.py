@@ -11,3 +11,10 @@ def test_get_facts_request():
         assert isinstance(x["deleted"], bool)
         assert isinstance(x["__v"], int)
 
+
+def test_get_by_status():
+    response = requests.get("https://petstore.swagger.io/v2/pet/findByStatus?status=available",
+                            headers={"Accept": "application/json"})
+    response = response.json()
+    for x in response:
+        assert x["status"] == "available"
