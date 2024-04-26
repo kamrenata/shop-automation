@@ -2,6 +2,7 @@
 import pytest
 
 
-# @pytest.fixture(autouse=True)
-# def a():
-#     print("string" * 5)
+@pytest.fixture(autouse=True)
+def set_up(request):
+    request.cls.api_url = "https://petstore.swagger.io/v2/"
+
