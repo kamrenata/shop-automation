@@ -2,7 +2,6 @@ import requests
 import pytest
 from faker import Faker
 import random
-import json
 
 
 class TestPetGetEndpoints:
@@ -11,7 +10,8 @@ class TestPetGetEndpoints:
     @pytest.mark.parametrize("status", ["available", "pending", "sold"])
     def test_get_by_status(self, status):
         response = requests.get(f"{self.api_url}pet/findByStatus",
-                                headers={"Accept": "application/json"}, params={"status": status})
+                                headers={"Accept": "application/json"},
+                                params={"status": status})
         response = response.json()
         for x in response:
             assert x["status"] == status
@@ -23,7 +23,7 @@ class TestPetGetEndpoints:
             "id": self.fake.pyint(),
             "photoUrls": [
                 self.fake.url()
-                for _ in range(3)  #range now contents 3 urls
+                for _ in range(3)  # range now contents 3 urls
             ],
         }
         response = requests.post(f"{self.api_url}pet",
@@ -33,9 +33,8 @@ class TestPetGetEndpoints:
         requests.delete(f"{self.api_url}pet/{response.json().get('id')}")
 
     def test_get_by_id(self, add_new_pet):
-        petId = add_new_pet.json().get("id")
-        response = requests.get(f"{self.api_url}pet/{petId}",
-                                headers={"Accept": "application/json"})
+        pet_id = add_new_pet.json().get("id")
+        response = requests.get(f"{self.api_url}pet/{pet_id}")
         data = response.json()
         # 0. the response json is not empty
         assert data
@@ -52,12 +51,13 @@ class TestPetGetEndpoints:
         # 6. check photoUrls type is list
         assert isinstance(data.get("photoUrls"), list)
         # 7. petId is the same as in the curl
-        assert data.get("id") == petId
+        assert data.get("id") == pet_id
         # 8. returned petId format is int
         assert isinstance(data.get("id"), int)
         # 9. url starts with https
         for i in data.get("photoUrls"):
             assert i.startswith("http")
+        assert response.headers.get("Content-Type") == "application/json"
 
 
 class TestPetPostEndpoints:
@@ -70,14 +70,61 @@ class TestPetPostEndpoints:
         ],
     }
 
+    @pytest.fixture
+    def add_new_pet(self):
+        required_payload = {
+            "name": self.fake.name(),
+            "id": self.fake.pyint(),
+            "photoUrls": [
+                self.fake.url()
+                for _ in range(3)  # range now contents 3 urls
+            ],
+        }
+        response = requests.post(f"{self.api_url}pet",
+                                 headers={"Accept": "application/json"},
+                                 json=required_payload)
+        yield response
+        requests.delete(f"{self.api_url}pet/{response.json().get('id')}")
+
     def test_add_new_pet(self):
         response = requests.post(f"{self.api_url}pet",
                                  headers={"Accept": "application/json"},
                                  json=self.required_payload)
         assert response.status_code == 200
 
-    def test_add_pet_image(self):
+    def test_add_pet_image(self, add_new_pet):
         response = requests.post(f"{self.api_url}pet/{petId}/uploadImage",
                                  headers={"Accept": "application/json"},
                                  json=self.required_payload)
         assert response.json()
+
+    def test_update_pet(self, add_new_pet):
+        pet_id = add_new_pet.json().get("id")
+        pet_info = {"id": pet_id, "name": self.fake.name(), "status": "sold"}
+        response = requests.post(f"{self.api_url}pet/{pet_id}",
+                                 headers={"Accept": "application/json"},
+                                 json=pet_info)
+        assert response.status_code == 200
+
+
+class TestPetDeleteEndpoints:
+    fake = Faker()
+
+    @pytest.fixture
+    def add_new_pet(self):
+        required_payload = {
+            "name": self.fake.name(),
+            "id": self.fake.pyint(),
+            "photoUrls": [
+                self.fake.url()
+            ],
+        }
+        response = requests.post(f"{self.api_url}pet",
+                                 headers={"Accept": "application/json"},
+                                 json=required_payload)
+
+    def test_delete_pet(self, add_new_pet):
+        pet_id = self.add_new_pet().json().get("id")
+        response = requests.delete(f"{self.api_url}pet/{pet_id}",
+                                   headers={"Accept": "application/json"},
+                                   json=required_payload)

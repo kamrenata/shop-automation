@@ -6,3 +6,6 @@ import pytest
 def set_up(request):
     request.cls.api_url = "https://petstore.swagger.io/v2/"
 
+
+
+
