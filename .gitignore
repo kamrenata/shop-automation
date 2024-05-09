@@ -2,3 +2,4 @@
 /.idea
 /chrome*
 /__pycache__
+tests/api/__pycache__

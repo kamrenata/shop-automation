@@ -4,6 +4,7 @@ from faker import Faker
 import random
 from tests.api.constants import URL
 
+
 class TestPetGetEndpoints:
     fake = Faker()
 
@@ -67,7 +68,8 @@ class TestPetPostEndpoints:
                                  json=self.required_payload)
         assert response.json()
 
-    def test_update_pet(self, add_and_delete_new_pet): #this test will have error 415 as there should be 'Content-Type: application/x-www-form-urlencoded'
+    def test_update_pet(self,
+                        add_and_delete_new_pet):  # this test will have error 415 as there should be 'Content-Type: application/x-www-form-urlencoded'
         pet_id = add_and_delete_new_pet.json().get("id")
         pet_info = {"id": pet_id, "name": self.fake.name(), "status": "sold"}
         response = requests.post(f"{URL}pet/{pet_id}",
@@ -93,7 +95,7 @@ class TestPetDeleteEndpoints:
                                  json=required_payload)
         return response
 
-    def test_delete_pet(self, add_new_pet):  #написать проверки на этот эндпойнт
+    def test_delete_pet(self, add_new_pet):  # написать проверки на этот эндпойнт
         pet_id = add_new_pet.json().get("id")
         response = requests.delete(f"{URL}pet/{pet_id}",
                                    headers={"Accept": "application/json"})
