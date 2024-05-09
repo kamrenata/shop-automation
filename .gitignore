@@ -1,7 +1,7 @@
 /.pytest_cache
 /.idea
 /chrome*
-/__pycache__
+/__pycache__*
 tests/api/__pycache__
 pages/__pycache__/
 scripts/__pycache__/
