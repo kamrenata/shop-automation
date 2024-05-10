@@ -3,6 +3,7 @@ from pages.sign_in_page import *
 
 from time import sleep
 
+
 def test_register_user(driver):
     """
     Wait till loader is disappeared+
@@ -27,10 +28,4 @@ def test_register_user(driver):
     # page.driver.switch_to.parent_frame()
     # page.switch_to_frame("framelive")
     sign_in_page.find_element(sign_in_page.sign_out_button)
-    a=1
-
-
-
-
-
-
+    a = 1

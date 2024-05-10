@@ -22,9 +22,9 @@ system = {
 }
 
 ROOT = str(pathlib.Path(os.path.dirname(os.path.abspath(__file__))).parent)
-ZIP_DIR = os.path.join(ROOT, 'temp.zip')
-CHROME_DIR = os.path.join(ROOT, 'chrome')
-CHROMEDRIVER_DIR = os.path.join(ROOT, 'chromedriver')
+ZIP_DIR = os.path.join(ROOT, "temp.zip")
+CHROME_DIR = os.path.join(ROOT, "chrome")
+CHROMEDRIVER_DIR = os.path.join(ROOT, "chromedriver")
 
 
 def get_stable_chrome(platform) -> list:
@@ -74,14 +74,14 @@ def download_chrome(urls: list):
     for url in urls:
         response = requests.get(url, stream=True)
 
-        with tqdm(total=int(response.headers.get('content-length', 0)),
-                  desc=f"{Fore.GREEN}Installing {'Chrome Driver' if 'driver' in url else 'Chrome For Testing'}",
-                  unit='iB',
-                  unit_scale=True,
-                  dynamic_ncols=True
-                  ) as progress_bar:
-
-            with open(ZIP_DIR, 'wb') as file:
+        with tqdm(
+            total=int(response.headers.get("content-length", 0)),
+            desc=f"{Fore.GREEN}Installing {'Chrome Driver' if 'driver' in url else 'Chrome For Testing'}",
+            unit="iB",
+            unit_scale=True,
+            dynamic_ncols=True,
+        ) as progress_bar:
+            with open(ZIP_DIR, "wb") as file:
                 for data in response.iter_content(1024):
                     progress_bar.update(len(data))
                     file.write(data)
@@ -90,19 +90,19 @@ def download_chrome(urls: list):
         extract_dir = CHROMEDRIVER_DIR if "driver" in url else CHROME_DIR
         os.makedirs(extract_dir, exist_ok=True)
 
-        with zipfile.ZipFile(ZIP_DIR, 'r') as zip_ref:
+        with zipfile.ZipFile(ZIP_DIR, "r") as zip_ref:
             zip_ref.extractall(extract_dir)
 
         os.remove(ZIP_DIR)
 
     try:
-        subprocess.run(['chmod', '-R', '777', CHROME_DIR], check=True)
-        subprocess.run(['chmod', '-R', '777', CHROMEDRIVER_DIR], check=True)
+        subprocess.run(["chmod", "-R", "777", CHROME_DIR], check=True)
+        subprocess.run(["chmod", "-R", "777", CHROMEDRIVER_DIR], check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
 
 
 # if not (os.path.exists(CHROME_DIR) and os.path.exists(CHROMEDRIVER_DIR)) and os.getenv("cft", False):
-    # TODO: Check is latest version is installed and then pass
+# TODO: Check is latest version is installed and then pass
 # a = get_stable_chrome("mac-arm64")
 # download_chrome(a)

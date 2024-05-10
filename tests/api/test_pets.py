@@ -10,16 +10,18 @@ class TestPetGetEndpoints:
 
     @pytest.mark.parametrize("status", ["available", "pending", "sold"])
     def test_get_by_status(self, status):
-        response = requests.get(f"{URL}pet/findByStatus",
-                                headers={"Accept": "application/json"},
-                                params={"status": status})
+        response = requests.get(
+            f"{URL}/pet/findByStatus",
+            headers={"Accept": "application/json"},
+            params={"status": status},
+        )
         response = response.json()
         for x in response:
             assert x["status"] == status
 
     def test_get_by_id(self, add_and_delete_new_pet):
         pet_id = add_and_delete_new_pet.json().get("id")
-        response = requests.get(f"{URL}pet/{pet_id}")
+        response = requests.get(f"{URL}/pet/{pet_id}")
         data = response.json()
         # 0. the response json is not empty
         assert data
@@ -50,31 +52,39 @@ class TestPetPostEndpoints:
     required_payload = {
         "name": fake.name(),
         "id": random.randint(1, 99),
-        "photoUrls": [
-            "string"
-        ],
+        "photoUrls": ["string"],
     }
 
     def test_add_new_pet(self):
-        response = requests.post(f"{URL}pet",
-                                 headers={"Accept": "application/json"},
-                                 json=self.required_payload)
+        response = requests.post(
+            f"{URL}/pet",
+            headers={"Accept": "application/json"},
+            json=self.required_payload,
+        )
         assert response.status_code == 200
 
     def test_add_pet_image(self, add_and_delete_new_pet):
         pet_id = add_and_delete_new_pet.json().get("id")
-        response = requests.post(f"{URL}pet/{pet_id}/uploadImage",
-                                 headers={"Accept": "application/json"},
-                                 json=self.required_payload)
+        response = requests.post(
+            f"{URL}/pet/{pet_id}/uploadImage",
+            headers={"Accept": "application/json"},
+            json=self.required_payload,
+        )
         assert response.json()
 
-    def test_update_pet(self,
-                        add_and_delete_new_pet):  # this test will have error 415 as there should be 'Content-Type: application/x-www-form-urlencoded'
+    def test_update_pet(
+        self, add_and_delete_new_pet
+    ):  # this test will have error 415 as there should be 'Content-Type: application/x-www-form-urlencoded'
         pet_id = add_and_delete_new_pet.json().get("id")
         pet_info = {"id": pet_id, "name": self.fake.name(), "status": "sold"}
-        response = requests.post(f"{URL}pet/{pet_id}",
-                                 headers={"Accept": "application/json", 'Content-Type': "multipart/form-data"},
-                                 json=pet_info)
+        response = requests.post(
+            f"{URL}/pet/{pet_id}",
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "multipart/form-data",
+            },
+            json=pet_info,
+        )
         assert response.status_code == 200
 
 
@@ -86,17 +96,16 @@ class TestPetDeleteEndpoints:
         required_payload = {
             "name": self.fake.name(),
             "id": self.fake.pyint(),
-            "photoUrls": [
-                self.fake.url()
-            ],
+            "photoUrls": [self.fake.url()],
         }
-        response = requests.post(f"{URL}pet",
-                                 headers={"Accept": "application/json"},
-                                 json=required_payload)
+        response = requests.post(
+            f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
+        )
         return response
 
     def test_delete_pet(self, add_new_pet):  # написать проверки на этот эндпойнт
         pet_id = add_new_pet.json().get("id")
-        response = requests.delete(f"{URL}pet/{pet_id}",
-                                   headers={"Accept": "application/json"})
+        response = requests.delete(
+            f"{URL}/pet/{pet_id}", headers={"Accept": "application/json"}
+        )
         assert response.status_code == 200

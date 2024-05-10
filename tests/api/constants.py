@@ -1,1 +1,1 @@
-URL = "https://petstore.swagger.io/v2/"
+URL = "https://petstore.swagger.io/v2"
