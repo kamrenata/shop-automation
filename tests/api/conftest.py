@@ -5,6 +5,7 @@ import pytest
 import requests
 from faker import Faker
 from tests.api.constants import URL
+from tests.api.__init__ import *
 
 fake = Faker()
 
@@ -27,7 +28,7 @@ def add_and_delete_new_pet():
 def login_user():
     requests.get(
         f"{URL}/user/login",
-        params={"username": "john", "password": "12345"},
+        params={"username": UserCredentials().username, "password": UserCredentials().password},
         headers={"Accept": "application/json"},
     )
 
@@ -52,9 +53,10 @@ def create_user(request):
         headers={"Accept": "application/json", "Content-Type": "application/json"},
         json=required_payload,
     )
-    if response.status_code == 200: #if response is 200, then request class cls returns username used to run the fixture
+    if response.status_code == 200:  # if response is 200, then request class cls returns username used to run the
+        # fixture
         request.cls.username = username
-        return response, username #returns response && username
+        return response, username  # returns response && username
     else:
         raise AssertionError(f"Code is, {response.status_code}")
 
@@ -68,10 +70,22 @@ def place_order(add_and_delete_new_pet):
         "shipDate": "2024-07-10T11:57:49.135Z",
         "status": "placed",
         "complete": True,
-        # "complete": "true"
     }
     return requests.post(
         f"{URL}/store/order",
         headers={"Accept": "application/json", "Content-Type": "application/json"},
         json=required_payload,
     )
+
+
+@pytest.fixture
+def add_new_pet(self):
+    required_payload = {
+        "name": self.fake.name(),
+        "id": self.fake.pyint(),
+        "photoUrls": [self.fake.url()],
+    }
+    response = requests.post(
+        f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
+    )
+    return response

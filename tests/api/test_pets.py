@@ -3,6 +3,7 @@ import pytest
 from faker import Faker
 import random
 from tests.api.constants import URL
+from tests.api.payload_generator import UserPayload
 
 
 class TestPetGetEndpoints:
@@ -72,9 +73,8 @@ class TestPetPostEndpoints:
         )
         assert response.json()
 
-    def test_update_pet(
-        self, add_and_delete_new_pet
-    ):  # this test will have error 415 as there should be 'Content-Type: application/x-www-form-urlencoded'
+    def test_update_pet(self, add_and_delete_new_pet):
+        # this test will have error 415 as there should be 'Content-Type: application/x-www-form-urlencoded'
         pet_id = add_and_delete_new_pet.json().get("id")
         pet_info = {"id": pet_id, "name": self.fake.name(), "status": "sold"}
         response = requests.post(
@@ -91,19 +91,7 @@ class TestPetPostEndpoints:
 class TestPetDeleteEndpoints:
     fake = Faker()
 
-    @pytest.fixture
-    def add_new_pet(self):
-        required_payload = {
-            "name": self.fake.name(),
-            "id": self.fake.pyint(),
-            "photoUrls": [self.fake.url()],
-        }
-        response = requests.post(
-            f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
-        )
-        return response
-
-    def test_delete_pet(self, add_new_pet):  # написать проверки на этот эндпойнт
+    def test_delete_pet(self, add_new_pet):
         pet_id = add_new_pet.json().get("id")
         response = requests.delete(
             f"{URL}/pet/{pet_id}", headers={"Accept": "application/json"}

@@ -24,8 +24,5 @@ def test_register_user(driver):
     sign_in_page.find_element(sign_in_page.new_account).click()
     sign_in_page.submit_form_with_valid_fields()
     sleep(5)
-    # page = MainPage(driver)
-    # page.driver.switch_to.parent_frame()
-    # page.switch_to_frame("framelive")
     sign_in_page.find_element(sign_in_page.sign_out_button)
     a = 1
