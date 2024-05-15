@@ -3,7 +3,6 @@ import pytest
 from faker import Faker
 import random
 from tests.api.constants import URL
-from tests.api.payload_generator import UserPayload
 
 
 class TestPetGetEndpoints:

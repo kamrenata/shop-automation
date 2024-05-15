@@ -1,8 +1,9 @@
 import random
 import pytest
-from faker import Faker
 from tests.api.constants import URL
 from tests.api.payload_generator import UserPayload
+from tests.api.__init__ import *
+
 import requests
 
 
@@ -40,7 +41,7 @@ class TestUserGetRequests:
     def test_user_login(self):
         response = requests.get(
             f"{URL}/user/login",
-            params={"username": "john", "password": "12345"},
+            params={"username": UserCredentials().username, "password": UserCredentials().password},
             headers={"Accept": "application/json"},
         )
         assert response.status_code == 200

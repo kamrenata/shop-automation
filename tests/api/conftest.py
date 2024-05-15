@@ -1,9 +1,7 @@
 """Middle level conftest visible for tests directory"""
 import random
-
 import pytest
 import requests
-from faker import Faker
 from tests.api.constants import URL
 from tests.api.__init__ import *
 
@@ -79,11 +77,11 @@ def place_order(add_and_delete_new_pet):
 
 
 @pytest.fixture
-def add_new_pet(self):
+def add_new_pet():
     required_payload = {
-        "name": self.fake.name(),
-        "id": self.fake.pyint(),
-        "photoUrls": [self.fake.url()],
+        "name": fake.name(),
+        "id": fake.pyint(),
+        "photoUrls": [fake.url()],
     }
     response = requests.post(
         f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
