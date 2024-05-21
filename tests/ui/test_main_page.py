@@ -28,4 +28,3 @@ class TestMainPage:
         page = MainPage(driver)
         page.open_url(page.url)
         page.wait_element_absent(page.loader)
-
