@@ -87,3 +87,4 @@ def add_new_pet():
         f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
     )
     return response
+

@@ -3,7 +3,7 @@ import pytest
 
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.chrome.service import Service
-from scripts.cft_management import ROOT
+from scripts.cft_management import ROOT, get_chrome_paths
 
 
 # options.binary_location = os.path.join(
@@ -20,12 +20,12 @@ from scripts.cft_management import ROOT
 @pytest.fixture(autouse=True)
 def driver():
     """Create chrome driver for Selenium"""
+    chrome_path, chromedriver_path = get_chrome_paths()
     options = ChromeOptions()
     options.binary_location = str(
         os.path.join(
             ROOT,
-            "chrome/chrome-mac-arm64/Google Chrome for "
-            "Testing.app/Contents/MacOS/Google Chrome for Testing",
+            chrome_path
         )
     )
 
@@ -33,7 +33,7 @@ def driver():
         options=options,
         service=Service(
             executable_path=str(
-                os.path.join(ROOT, "chromedriver/chromedriver-mac-arm64/chromedriver")
+                os.path.join(ROOT, chromedriver_path)
             )
         ),
     )

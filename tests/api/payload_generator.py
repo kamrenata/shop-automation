@@ -1,4 +1,5 @@
 from faker import Faker
+from tests.api.conftest import fake
 
 
 class UserPayload:
@@ -48,4 +49,9 @@ class UserPayload:
             # b for b in list
         ]
         return required_payload
+
+
+class UserCredentials:
+    username = fake.simple_profile().get("username")
+    password = fake.password
 
