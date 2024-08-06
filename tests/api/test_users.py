@@ -1,9 +1,9 @@
 import random
 import pytest
 from faker import Faker
-from tests.api.constants import URL
-from tests.api.payload_generator import UserPayload
-from payload_generator import UserCredentials
+from lib.constants import URL
+from lib.payload_generator import UserPayload
+from lib.payload_generator import UserCredentials
 
 import requests
 

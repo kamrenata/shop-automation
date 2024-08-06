@@ -17,3 +17,14 @@ class MainPage(BasePage):
     loader = (By.ID, "loadingMessage")
     sign_out_button = (By.CLASS_NAME, "logout hidden-sm-down")
     sign_in_button = (By.CLASS_NAME, "user-info")
+    clothes_button = (By.ID, "category-3")
+    men_clothes_button = (By.ID, "category-4")
+    women_clothes_button = (By.ID, "category-5")
+    accessories_button = (By.ID, "category-6")
+    stationery_button = (By.ID, "category-7")
+    home_accessories_button = (By.ID, "category-8")
+    art_button = (By.ID, "category-9")
+    search_field = (By.ID, "search_widget")
+    language_drop_down_list = (By.CLASS_NAME, "expand-more")
+
+

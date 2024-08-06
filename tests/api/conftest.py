@@ -2,24 +2,19 @@
 import random
 import pytest
 import requests
-from tests.api.constants import URL
-from tests.api.__init__ import *
+from faker import Faker
+from lib.constants import URL
+from lib.payload_generator import UserCredentials
+from lib.client_requests import Pets
 
 fake = Faker()
 
 
 @pytest.fixture
-def add_and_delete_new_pet():
-    required_payload = {
-        "name": fake.name(),
-        "id": fake.pyint(),
-        "photoUrls": [fake.url() for _ in range(3)],  # range now contents 3 urls
-    }
-    response = requests.post(
-        f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
-    )
-    yield response
-    requests.delete(f"{URL}pet/{response.json().get('id')}")
+def add_and_delete_new_pet(add_new_pet):
+    Pets().add_pet_and_get_id()
+    yield
+    Pets().delete_new_pet()
 
 
 @pytest.fixture
@@ -32,8 +27,8 @@ def login_user():
 
 
 @pytest.fixture
-def create_user(request):
-    username = str(fake.simple_profile().get("username"))
+def create_user():
+    username = str(fake.get("username"))
     required_payload = [
         {
             "id": fake.pyint(),
@@ -53,14 +48,14 @@ def create_user(request):
     )
     if response.status_code == 200:  # if response is 200, then request class cls returns username used to run the
         # fixture
-        request.cls.username = username
+        requests.cls.username = username
         return response, username  # returns response && username
     else:
         raise AssertionError(f"Code is, {response.status_code}")
 
 
 @pytest.fixture
-def place_order(add_and_delete_new_pet):
+def place_order(add_and_delete_new_pet, request_instance):
     required_payload = {
         "id": random.randint(1, 10),
         "petId": add_and_delete_new_pet.json().get("id"),
@@ -87,4 +82,3 @@ def add_new_pet():
         f"{URL}/pet", headers={"Accept": "application/json"}, json=required_payload
     )
     return response
-

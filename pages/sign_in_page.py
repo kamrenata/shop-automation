@@ -12,7 +12,7 @@ class SignInPage(BasePage):
     url = "https://demo.prestashop.com/#/en/front"
 
     no_account_button = (By.CLASS_NAME, "no-account")
-    female_gender_radio_button = (By.ID, "field-id_gender-2")
+    female_gender_radio_button = (By.NAME, "id_gender")
     name_field = (By.ID, "field-firstname")
     lastname_field = (By.ID, "field-lastname")
     email_field = (By.ID, "field-email")
@@ -25,6 +25,7 @@ class SignInPage(BasePage):
     sign_out_button = (By.CSS_SELECTOR, ".user-info > a")
 
     def submit_form_with_valid_fields(self):
+        self.wait_element_is_present(self.female_gender_radio_button, timeout=15)
         self.find_element(self.female_gender_radio_button).click()
         self.find_element(self.name_field).send_keys(self.fake.first_name())
         self.find_element(self.lastname_field).send_keys(self.fake.last_name())

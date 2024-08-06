@@ -1,5 +1,8 @@
 from pages.main_page import *
 from time import sleep
+from selenium.webdriver.common.action_chains import ActionChains
+
+from tests.ui.test_base import TestBase
 
 
 class TestMainPage:
@@ -28,3 +31,10 @@ class TestMainPage:
         page = MainPage(driver)
         page.open_url(page.url)
         page.wait_element_absent(page.loader)
+
+    def test_navigate_to_mens_clothes(self, driver):
+        page = MainPage(driver)
+        page.open_url(page.url)
+        navigate = ActionChains(driver)
+        navigate.move_to_element(page.clothes_button)
+        page.find_element(page.men_clothes_button).click()

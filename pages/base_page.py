@@ -28,7 +28,7 @@ class BasePage:
 
     def wait_element_is_present(self, locator: tuple, timeout=10):
         WebDriverWait(driver=self.driver, timeout=timeout).until(
-            EC.visibility_of_element_located(locator)
+            EC.presence_of_element_located(locator)
         )
 
     def find_element_by_unique_text(self, text):
@@ -36,3 +36,8 @@ class BasePage:
 
     def switch_to_frame(self, frame_id: str):
         self.driver.switch_to.frame(self.find_element((By.ID, frame_id)))
+
+    def switch_to_frame_by_xpath(self, frame_name):
+        self.driver.switch_to.frame(self.find_element((By.XPATH, frame_name)))
+
+
