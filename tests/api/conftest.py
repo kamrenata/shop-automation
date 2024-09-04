@@ -4,8 +4,8 @@ import pytest
 import requests
 from faker import Faker
 from lib.constants import URL
-from lib.payload_generator import UserCredentials
 from lib.client_requests import Pets
+from lib.payload_generator import UserCredentials
 
 fake = Faker()
 
@@ -55,7 +55,7 @@ def create_user():
 
 
 @pytest.fixture
-def place_order(add_and_delete_new_pet, request_instance):
+def place_order(add_and_delete_new_pet):
     required_payload = {
         "id": random.randint(1, 10),
         "petId": add_and_delete_new_pet.json().get("id"),

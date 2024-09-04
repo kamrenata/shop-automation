@@ -1,5 +1,5 @@
 from faker import Faker
-# from tests.api.conftest import fake
+import random
 
 
 class UserPayload:
@@ -56,3 +56,21 @@ class UserCredentials(UserPayload):
 
     username = fake.simple_profile().get("username")
     password = fake.password
+
+
+class StorePayload:
+    def __init__(self, pet):
+        self.pet = pet
+
+    def generate_place_pet_store_payload(self, true=None):
+        required_payload = [
+            {
+                "id": random.randint(1, 10),
+                "petId": self.pet.add_pet_and_get_id(),
+                "quantity": random.randint(1, 5),
+                "shipDate": "2024-09-10T11:57:49.135Z", # hardcoded date?
+                "status": "placed",
+                "complete": true
+            }
+        ]
+        return required_payload

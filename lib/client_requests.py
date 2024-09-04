@@ -1,5 +1,6 @@
 from lib.request_wrapper import HTTPClient
 from faker import Faker
+from lib.payload_generator import StorePayload
 
 
 class Pets(HTTPClient):
@@ -41,9 +42,31 @@ class Pets(HTTPClient):
 
 
 class Store(HTTPClient):
+    store_payload = StorePayload(pet=Pets())
+
     def __init__(self):
         super().__init__()
 
-    def get_pet_inventory(self):
+    def get_pet_inventory(self, headers, params):
         route = "store/inventory"
-        return self.get(route)
+        return self.get(route, headers=headers, params=params)
+
+    def get_by_order(self, headers, params):
+        route = f"store/order/{order_id}"
+        order_id = place_order.get("id")
+        return self.get(route, params=params, headers=headers)
+
+    def place_order_for_pet(self):
+        route = "store/order"
+        required_payload = self.store_payload.generate_place_pet_store_payload()
+        return self.post(route, json=required_payload)
+
+    # def test_place_order_for_pet(self, add_and_delete_new_pet, true=None):
+    #
+    #         response = requests.post(
+    #             f"{URL}/store/order",
+    #             headers={"Accept": "application/json", "Content-Type": "application/json"},
+    #             json=required_payload,
+    #         )
+    #
+    #         assert response.status_code == 200
