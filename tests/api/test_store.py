@@ -40,3 +40,4 @@ class TestStorePostRequests:
     def test_place_order_for_pet(self):
         response = self.store.place_order_for_pet()
         assert response.status_code == 200
+

@@ -21,13 +21,46 @@ def login_user():
     requests.get(
         f"{URL}/user/login",
         params={"username": UserCredentials().username, "password": UserCredentials().password},
-        headers={"Accept": "application/json"},
+        headers={"Accept": "application/json"}
     )
 
 
 @pytest.fixture
+def create_and_login_user():
+    username = fake.simple_profile().get("username")
+    password = fake.password()
+
+    required_payload = [
+        {
+            "id": fake.pyint(),
+            "username": username,
+            "firstName": fake.first_name(),
+            "lastName": fake.last_name(),
+            "email": fake.email(),
+            "password": password,
+            "phone": fake.phone_number(),
+            "userStatus": 0,
+        }
+    ]
+    response = requests.post(
+        f"{URL}/user/createWithList",
+        headers={"Accept": "application/json", "Content-Type": "application/json"},
+        json=required_payload,
+    )
+    if response.status_code == 200:  # if response is 200, then request class cls returns username used to run the
+        # fixture
+        requests.get(f"{URL}/user/login",
+                     params={"username": username, "password": password},
+                     headers={"Accept": "application/json"}
+                     )
+        return username
+    else:
+        raise AssertionError(f"Code is, {response.status_code}")
+
+
+@pytest.fixture
 def create_user():
-    username = str(fake.get("username"))
+    username = fake.simple_profile().get("username")
     required_payload = [
         {
             "id": fake.pyint(),
@@ -47,7 +80,6 @@ def create_user():
     )
     if response.status_code == 200:  # if response is 200, then request class cls returns username used to run the
         # fixture
-        requests.cls.username = username
         return response, username  # returns response && username
     else:
         raise AssertionError(f"Code is, {response.status_code}")
