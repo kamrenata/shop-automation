@@ -51,22 +51,18 @@ class Store(HTTPClient):
         route = "store/inventory"
         return self.get(route, headers=headers, params=params)
 
-    def get_by_order(self, headers, params):
-        route = f"store/order/{order_id}"
-        order_id = place_order.get("id")
-        return self.get(route, params=params, headers=headers)
-
     def place_order_for_pet(self):
         route = "store/order"
         required_payload = self.store_payload.generate_place_pet_store_payload()
         return self.post(route, json=required_payload)
 
-    # def test_place_order_for_pet(self, add_and_delete_new_pet, true=None):
-    #
-    #         response = requests.post(
-    #             f"{URL}/store/order",
-    #             headers={"Accept": "application/json", "Content-Type": "application/json"},
-    #             json=required_payload,
-    #         )
-    #
-    #         assert response.status_code == 200
+    def find_by_order(self, order_id, headers):
+        route = f"store/order/{order_id}"
+        return self.get(route, headers=headers, params=None)
+
+    def delete_order_by_id(self, order_id, headers):
+        route = f"store/order/{order_id}"
+        return self.delete(route, headers=headers, params=None)
+
+
+

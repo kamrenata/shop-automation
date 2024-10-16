@@ -12,8 +12,7 @@ fake = Faker()
 
 @pytest.fixture
 def add_and_delete_new_pet(add_new_pet):
-    Pets().add_pet_and_get_id()
-    yield
+    yield Pets().add_pet_and_get_id()
     Pets().delete_new_pet()
 
 
@@ -58,7 +57,7 @@ def create_user():
 def place_order(add_and_delete_new_pet):
     required_payload = {
         "id": random.randint(1, 10),
-        "petId": add_and_delete_new_pet.json().get("id"),
+        "petId": add_and_delete_new_pet,
         "quantity": random.randint(1, 5),
         "shipDate": "2024-07-10T11:57:49.135Z",
         "status": "placed",

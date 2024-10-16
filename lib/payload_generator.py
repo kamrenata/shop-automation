@@ -63,8 +63,7 @@ class StorePayload:
         self.pet = pet
 
     def generate_place_pet_store_payload(self, true=None):
-        required_payload = [
-            {
+        required_payload = {
                 "id": random.randint(1, 10),
                 "petId": self.pet.add_pet_and_get_id(),
                 "quantity": random.randint(1, 5),
@@ -72,5 +71,4 @@ class StorePayload:
                 "status": "placed",
                 "complete": true
             }
-        ]
         return required_payload
