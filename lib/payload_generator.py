@@ -1,5 +1,6 @@
 from faker import Faker
-from tests.api.conftest import fake
+import random
+from _datetime import datetime
 
 
 class UserPayload:
@@ -51,7 +52,26 @@ class UserPayload:
         return required_payload
 
 
-class UserCredentials:
+class UserCredentials(UserPayload):
+    fake = Faker()
+
     username = fake.simple_profile().get("username")
     password = fake.password
+
+
+class StorePayload:
+    def __init__(self, pet):
+        self.pet = pet
+
+    def generate_place_pet_store_payload(self, true=None):
+        current_time = datetime.utcnow().isoformat(timespec='milliseconds') + 'Z'
+        required_payload = {
+                "id": random.randint(1, 10),
+                "petId": self.pet.add_pet_and_get_id(),
+                "quantity": random.randint(1, 5),
+                "shipDate": current_time,
+                "status": "placed",
+                "complete": true
+            }
+        return required_payload
 

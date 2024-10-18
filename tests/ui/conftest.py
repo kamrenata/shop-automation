@@ -17,6 +17,31 @@ from scripts.cft_management import ROOT, get_chrome_paths
 #             )
 
 
+@pytest.fixture(scope="class")
+def driver_for_base_test(request):
+    """Create chrome driver for Selenium"""
+    chrome_path, chromedriver_path = get_chrome_paths()
+    options = ChromeOptions()
+    options.binary_location = str(
+        os.path.join(
+            ROOT,
+            chrome_path
+        )
+    )
+
+    driver = Chrome(
+        options=options,
+        service=Service(
+            executable_path=str(
+                os.path.join(ROOT, chromedriver_path)
+            )
+        ),
+    )
+    request.cls.driver = driver
+    yield driver
+    driver.quit()
+
+
 @pytest.fixture(autouse=True)
 def driver():
     """Create chrome driver for Selenium"""
