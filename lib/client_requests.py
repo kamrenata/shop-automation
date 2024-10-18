@@ -8,7 +8,7 @@ class Pets(HTTPClient):
 
     def __init__(self):
         super().__init__()
-        # при наследовании, инициализация child & parent class
+        # init inherited class in current class in order to use its methods inside the current class
 
     def get_by_status(self, headers, params):
         route = "pet/findByStatus"

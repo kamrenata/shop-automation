@@ -1,5 +1,6 @@
 from faker import Faker
 import random
+from _datetime import datetime
 
 
 class UserPayload:
@@ -63,12 +64,14 @@ class StorePayload:
         self.pet = pet
 
     def generate_place_pet_store_payload(self, true=None):
+        current_time = datetime.utcnow().isoformat(timespec='milliseconds') + 'Z'
         required_payload = {
                 "id": random.randint(1, 10),
                 "petId": self.pet.add_pet_and_get_id(),
                 "quantity": random.randint(1, 5),
-                "shipDate": "2024-09-10T11:57:49.135Z", # hardcoded date?
+                "shipDate": current_time,
                 "status": "placed",
                 "complete": true
             }
         return required_payload
+

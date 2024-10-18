@@ -2,9 +2,6 @@ from pages.main_page import *
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 
-from tests.ui.test_base import TestBase
-
-
 class TestMainPage:
     def test_logo_is_present(self, driver):
         """To verify that logo is visible"""
