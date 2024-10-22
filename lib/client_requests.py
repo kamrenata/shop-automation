@@ -14,10 +14,10 @@ class Pets(HTTPClient):
         route = "pet/findByStatus"
         return self.get(route, headers=headers, params=params)
 
-    def get_by_id(self, headers, params):
+    def get_by_id(self):
         pet_id = self.add_pet_and_get_id()
         route = f"pet/{pet_id}"
-        return self.get(route, headers=headers, params=params)
+        return self.get(route)
 
     def post_add_new_pet(self, headers, params, json):
         route = "pet"

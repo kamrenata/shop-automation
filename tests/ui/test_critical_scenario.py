@@ -1,5 +1,3 @@
-import time
-
 from pages.main_page import *
 from pages.sign_in_page import *
 from time import sleep
