@@ -2,6 +2,7 @@ from pages.main_page import *
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 
+
 class TestMainPage:
     def test_logo_is_present(self, driver):
         """To verify that logo is visible"""
@@ -33,5 +34,8 @@ class TestMainPage:
         page = MainPage(driver)
         page.open_url(page.url)
         navigate = ActionChains(driver)
-        navigate.move_to_element(page.clothes_button)
+        page.wait_element_absent(page.loader, 20)
+        page.switch_to_frame("framelive")
+        element = page.find_element(page.clothes_button)
+        navigate.move_to_element(element).perform()
         page.find_element(page.men_clothes_button).click()

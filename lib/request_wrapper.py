@@ -7,10 +7,12 @@ class HTTPClient:
         self.client = requests
         self.url: str = URL
 
-    def _generate_url(self, route: str):
+    def _generate_url(self, route: str): #private protected variable
         return self.url + "/" + route
 
-    def get(self, route, params, headers, **kwargs):
+    def get(self, route, params=None, headers=None, **kwargs):
+        if headers is None:
+            headers = {"Accept": "application/json"}
         return self.client.get(self._generate_url(route), params=params, headers=headers, **kwargs)
 
     def post(self, route, data=None, json=None, **kwargs):

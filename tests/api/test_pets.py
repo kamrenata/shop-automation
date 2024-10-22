@@ -20,7 +20,7 @@ class TestPetGetEndpoints:
             assert x["status"] == status
 
     def test_get_by_id(self):
-        response = self.pets.get_by_id(headers={"Accept": "application/json"}, params=None)
+        response = self.pets.get_by_id()
         data = response.json()
         # 0. the response json is not empty
         assert data
